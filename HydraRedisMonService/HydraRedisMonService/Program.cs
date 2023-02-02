@@ -14,9 +14,9 @@ var host = Host.CreateDefaultBuilder(args)
     {
         var config = cont.Configuration.GetSection("HydraConfig").GetHydraConfig();
         services
-            .AddHydra(config);
-        services.AddSingleton<RedisMonitor>();
-        services.AddHostedService<ConnectionService>();
+            .AddHydra(config)
+            .AddHydraEventHandler<ServiceMessageHandler>();
+        services.AddHostedService<CoreService>();
     }).Build();
 
 await host.RunAsync();
