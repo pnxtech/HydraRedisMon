@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HydraRedisMonService", "HydraRedisMonService\HydraRedisMonService.csproj", "{1912C2D4-48ED-44DD-B5CD-93F5551E5B7D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1912C2D4-48ED-44DD-B5CD-93F5551E5B7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1912C2D4-48ED-44DD-B5CD-93F5551E5B7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1912C2D4-48ED-44DD-B5CD-93F5551E5B7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1912C2D4-48ED-44DD-B5CD-93F5551E5B7D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EEB6C09C-B178-4411-B720-7C67BE8D1785}
+	EndGlobalSection
+EndGlobal
