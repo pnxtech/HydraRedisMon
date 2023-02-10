@@ -3,31 +3,11 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using StackExchange.Redis;
 using System;
-using static Hydra4NET.Hydra;
 using System.Text.Json;
 using System.Collections.Generic;
 
 namespace HydraRedisMonService
 {
-    public class PresenceNodeEntry2
-    {
-        public string? ServiceName { get; set; }
-        public string? ServiceDescription { get; set; }
-        public string? Version { get; set; }
-        public string? InstanceID { get; set; }
-        public int ProcessID { get; set; }
-        public string? Ip { get; set; }
-        public string? Port { get; set; }
-        public string? HostName { get; set; }
-        public string? UpdatedOn { get; set; }
-        public int Elapsed { get; set; }
-    }
-
-    public class PresenceNodeEntryCollection2 : List<PresenceNodeEntry2>
-    {
-        public PresenceNodeEntryCollection2() : base() { }
-    }
-
     internal class CoreService : BackgroundService
     {
         private IHydra _hydra;
@@ -56,7 +36,7 @@ namespace HydraRedisMonService
                         var db = _redis?.GetDatabase(0);
                         if (db != null)
                         {
-                            PresenceNodeEntryCollection2 nodes = await GetServiceNodesAsync();
+                            PresenceNodeEntryCollection nodes = await _hydra.GetServiceNodesAsync();
                             foreach (var entry in nodes)
                             {
                                 if (entry.Elapsed > _sweepIntervalInSeconds)
@@ -76,34 +56,6 @@ namespace HydraRedisMonService
             {
                 _logger.LogError(e, "ConnectionService failed");
             }
-        }
-
-        public async Task<PresenceNodeEntryCollection2> GetServiceNodesAsync()
-        {
-            var time1970 = new DateTime(1970, 1, 1);
-            var timeNow = (int)(DateTime.Now.ToUniversalTime().Subtract(time1970)).TotalSeconds;
-            PresenceNodeEntryCollection2 serviceEntries = new PresenceNodeEntryCollection2();
-            var db = _redis?.GetDatabase(0);
-            if (db != null)
-            {
-                HashEntry[] list = await db.HashGetAllAsync(_nodes_hash_key);
-                foreach (var entry in list)
-                {
-                    PresenceNodeEntry2? presenceNodeEntry = JsonSerializer.Deserialize<PresenceNodeEntry2>(entry.Value, new JsonSerializerOptions()
-                    {
-                        PropertyNameCaseInsensitive = true,
-                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                    });
-                    if (presenceNodeEntry != null)
-                    {
-                        var date = DateTime.Parse(presenceNodeEntry.UpdatedOn, null, System.Globalization.DateTimeStyles.RoundtripKind);
-                        var unixTimestamp = (int)(date.ToUniversalTime().Subtract(time1970)).TotalSeconds;
-                        presenceNodeEntry.Elapsed = timeNow - unixTimestamp;
-                        serviceEntries.Add(presenceNodeEntry);
-                    }
-                }
-            }
-            return serviceEntries;
         }
     }
 }
